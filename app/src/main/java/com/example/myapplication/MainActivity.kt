@@ -1,9 +1,12 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.*
+import android.graphics.drawable.AnimatedImageDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +22,7 @@ import java.nio.file.Files
 
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("WrongThread")
     @TargetApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,65 @@ class MainActivity : AppCompatActivity() {
           }
           */
 
+        val cropFactor = 0.95f //cropped to 92 % of the original size
+        val listener = ImageDecoder.OnHeaderDecodedListener { imageDecoder, imageInfo, source ->
+            /* val size = imageInfo.size.width
+             val left = (size - size * cropFactor).toInt()
+             val top = (size - size * cropFactor).toInt()
+             val right = (size * cropFactor).toInt()
+             val bottom = (size * cropFactor).toInt()
+             imageDecoder.crop = Rect(left, top, right, bottom)*/
+            val paint = Paint().apply {
+                isAntiAlias = true
+                color = Color.TRANSPARENT
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC) //replace the destination pixel with our source pixel
+                //erasing process to be done
+            }
+            //another way to modify the size of the image decoder called post processing
+            imageDecoder.setPostProcessor { canvas ->
+
+
+                val path = Path().apply {
+                    fillType = Path.FillType.INVERSE_EVEN_ODD
+                }
+
+                //we don't want to draw inside the path
+
+                val width = canvas.width.toFloat()
+                val height = canvas.height.toFloat()
+
+                //Warning: this does not work
+                path.addRoundRect(
+                    width - width * cropFactor,
+                    height - height * cropFactor,
+                    width * cropFactor,
+                    height * cropFactor,
+                    width * cropFactor,
+                    height * cropFactor,
+                    Path.Direction.CW
+                )
+
+                canvas.drawPath(path, paint)
+                PixelFormat.TRANSLUCENT
+            }
+        }
+
+
+        val source = ImageDecoder.createSource(resources, R.drawable.giphy)
+        val drawable = ImageDecoder.decodeDrawable(source, listener) // add listener
+
+        imageView.setImageDrawable(drawable)
+
+        startBtn.setOnClickListener {
+            val animatedDrawable = drawable as? AnimatedImageDrawable
+            animatedDrawable?.repeatCount = 2
+            animatedDrawable?.start()
+        }
+
+        stopBtn.setOnClickListener {
+            val animatedDrawable = drawable as? AnimatedImageDrawable
+            animatedDrawable?.stop()
+        }
         //Notification events
         val doeGroup = "group-id1"
         val smithGroup = "group-id2"
