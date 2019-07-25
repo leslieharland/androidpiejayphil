@@ -12,6 +12,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val data = ArrayList<String>()
+        data.add("email@mydomain.com")
+        data.add("+43 664 123123123")
+        data.add("5th Avenue, New York")
+        data.add("https://www.google.com")
         for (i in 0..100) {
             data.add("Item $i")
         }

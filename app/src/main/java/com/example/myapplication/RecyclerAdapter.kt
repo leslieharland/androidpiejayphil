@@ -1,9 +1,11 @@
 package com.example.myapplication
 
+import android.os.LocaleList
 import android.text.PrecomputedText
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.textclassifier.TextClassificationManager
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
@@ -31,6 +33,15 @@ class RecyclerAdapter(private val data: ArrayList<String>) : RecyclerView.Adapte
                 tv.text = precomputedText
             }
 
+        }
+
+        holder.itemView.setOnClickListener {
+            val manager = holder.itemView.context.getSystemService(TextClassificationManager::class.java)
+
+            background.submit {
+                val classification = manager.textClassifier.classifyText(data[position], 0, data[position].length, LocaleList.getDefault())
+                println(classification)
+            }
         }
 
         //will only show when creating very very sophisticated apps
