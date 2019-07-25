@@ -22,7 +22,8 @@ import java.nio.channels.Channel
 import java.nio.file.Files
 
 class MainActivity : AppCompatActivity() {
-
+    private var index = 0
+    private val names = arrayListOf("Tim", "Daniel", "Phillip")
     @TargetApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +33,13 @@ class MainActivity : AppCompatActivity() {
 //        editText.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_AUTO
 
         button.setOnClickListener {
-            val afm = getSystemService(AutofillManager::class.java)
-            afm?.requestAutofill(editText)
+            tvName.text = names[index % names.size]
+            index++
         }
 
+        button2.setOnClickListener {
+            tvAge.text = "$index"
+        }
     }
 
 }
