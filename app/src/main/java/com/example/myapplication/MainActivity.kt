@@ -28,13 +28,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        editText.setAutofillHints(View.AUTOFILL_HINT_PASSWORD)
-//        editText.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_AUTO
-
-        button.setOnClickListener {
-            val afm = getSystemService(AutofillManager::class.java)
-            afm?.requestAutofill(editText)
-        }
 
     }
 
