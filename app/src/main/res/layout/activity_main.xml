@@ -9,15 +9,4 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-
-    <Button
-            android:text="Request Service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/button"/>
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="password"
-            android:importantForAutofill="yes"
-            android:id="@+id/editText"/>
 </LinearLayout>
